@@ -6,35 +6,22 @@
 
 use core::panic::PanicInfo;
 
-mod serial;
-mod vga_buffer;
+use photon::println;
 
 #[unsafe(no_mangle)]
 pub extern "C" fn _start() -> ! {
-  println!("{}", "Debug");
-
-  #[cfg(test)]
   test_main();
 
   #[allow(clippy::empty_loop)]
   loop {}
 }
 
-#[cfg(not(test))]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-  println!("{}", info);
-  loop {}
-}
-
-#[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
   photon::test_panic_handler(info)
 }
 
-#[allow(clippy::eq_op)]
 #[test_case]
-fn trivial_assertion() {
-  assert_eq!(1, 1);
+fn test_println() {
+  println!("test_println output");
 }
